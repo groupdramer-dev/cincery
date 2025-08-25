@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel Administrativo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+      color: white;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    .login-container, .admin-container {
+      margin: 80px auto;
+      padding: 30px;
+      background: #222;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    }
+    input {
+      display: block;
+      margin: 12px auto;
+      padding: 10px;
+      width: 80%;
+      border-radius: 6px;
+      border: none;
+      text-align: center;
+      font-size: 16px;
+    }
+    button {
+      background: orange;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      margin-top: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: gold;
+    }
+    .option {
+      margin: 15px 0;
+      padding: 10px;
+      background: #333;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tela de Login -->
+  <div class="login-container" id="loginBox">
+    <h2>Login Administrativo</h2>
+    <input type="text" id="username" placeholder="Usuário">
+    <input type="password" id="password" placeholder="Senha">
+    <button onclick="login()">Entrar</button>
+    <p id="loginMsg" style="color:red;"></p>
+  </div>
+
+  <!-- Painel Administrativo -->
+  <div class="admin-container" id="adminBox" style="display:none;">
+    <h2>Painel de Controle</h2>
+
+    <div class="option">
+      <h3>📊 Estatísticas</h3>
+      <p>Total de cliques em "Gerar Diamantes": <span id="clickCount">0</span></p>
+    </div>
+
+    <div class="option">
+      <h3>🎵 Controle do Gemidão</h3>
+      <button onclick="toggleGemidao()">Ativar/Desativar Gemidão</button>
+    </div>
+
+    <div class="option">
+      <h3>🖼 Alterar Título</h3>
+      <input type="text" id="newTitle" placeholder="Novo título">
+      <button onclick="changeTitle()">Salvar</button>
+    </div>
+
+    <div class="option">
+      <h3>❌ Controle do Site</h3>
+      <button onclick="toggleSite()">Ativar/Desativar Site</button>
+    </div>
+  </div>
+
+  <script>
+    // ---- Login ----
+    function login() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      if(user === "admin" && pass === "admin123") {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("adminBox").style.display = "block";
+        loadStats();
+      } else {
+        document.getElementById("loginMsg").innerText = "Usuário ou senha inválidos!";
+      }
+    }
+
+    // ---- Estatísticas ----
+    function loadStats() {
+      const count = localStorage.getItem("diamondClicks") || 0;
+      document.getElementById("clickCount").innerText = count;
+    }
+
+    // ---- Gemidão ----
+    function toggleGemidao() {
+      let state = localStorage.getItem("gemidaoOff") === "true";
+      localStorage.setItem("gemidaoOff", !state);
+      alert("Gemidão agora está " + (!state ? "DESATIVADO" : "ATIVADO"));
+    }
+
+    // ---- Alterar título ----
+    function changeTitle() {
+      const newTitle = document.getElementById("newTitle").value;
+      if(newTitle.trim() !== "") {
+        localStorage.setItem("siteTitle", newTitle);
+        alert("Título atualizado!");
+      }
+    }
+
+    // ---- Ativar/Desativar site ----
+    function toggleSite() {
+      let disabled = localStorage.getItem("siteDisabled") === "true";
+      localStorage.setItem("siteDisabled", !disabled);
+      alert("Site agora está " + (!disabled ? "DESATIVADO" : "ATIVADO"));
+    }
+  </script>
+
+</body>
+  </html>
