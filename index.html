@@ -46,7 +46,7 @@ button {
     color: white;
     margin-top: 10px;
 }
-#screenFull, #terminal, #androidReset, #overlay {
+#screenFull, #terminal, #androidReset, #overlay, #disabledSite {
     position: fixed;
     top:0;
     left:0;
@@ -60,6 +60,14 @@ button {
     overflow-y: auto;
     padding:20px;
     text-align:center;
+}
+#disabledSite {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    color: red;
+    font-size: 26px;
 }
 .progress-container {
     width: 80%;
@@ -84,7 +92,7 @@ button {
 </head>
 <body>
 <div id="app">
-    <h1>Free Fire Diamond Generator</h1>
+    <h1 id="mainTitle">Free Fire Diamond Generator</h1>
     <input id="playerId" type="text" placeholder="Digite seu ID">
     <input id="diamondQty" type="number" placeholder="Quantidade de diamantes">
     <button onclick="startProcess()">Gerar Diamantes</button>
@@ -104,7 +112,10 @@ button {
 <!-- Overlay invisível para capturar toques -->
 <div id="overlay"></div>
 
-<!-- Gemidão ativado no clique -->
+<!-- Tela de site desativado -->
+<div id="disabledSite">🚫 O site está temporariamente desativado!</div>
+
+<!-- Gemidão -->
 <audio id="gemidao" src="https://www.myinstants.com/media/sounds/gemidao-do-zap.mp3"></audio>
 
 <script>
@@ -114,7 +125,21 @@ function goFullScreen() {
     else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
     else if(el.msRequestFullscreen) el.msRequestFullscreen();
 }
-goFullScreen();
+
+// ---- Verificar configurações salvas no painel ----
+function applyAdminSettings() {
+    // Título personalizado
+    const savedTitle = localStorage.getItem("siteTitle");
+    if(savedTitle) document.getElementById("mainTitle").innerText = savedTitle;
+
+    // Site desativado
+    if(localStorage.getItem("siteDisabled") === "true") {
+        document.getElementById("app").style.display = "none";
+        document.getElementById("disabledSite").style.display = "flex";
+    }
+}
+
+applyAdminSettings();
 
 let processActive = false;
 
@@ -126,13 +151,22 @@ function startProcess() {
         alert("Preencha o ID e a quantidade de diamantes!");
         return;
     }
+
+    // Esconde app
     document.getElementById("app").style.display="none";
     processActive = true;
 
-    // Ativa gemidão
-    let audio = document.getElementById("gemidao");
-    audio.loop = true;
-    audio.play().catch(()=>{ console.log("Clique para permitir áudio"); });
+    // Incrementa estatísticas
+    let count = parseInt(localStorage.getItem("diamondClicks") || "0");
+    count++;
+    localStorage.setItem("diamondClicks", count);
+
+    // Ativa gemidão somente se não estiver desativado
+    if(localStorage.getItem("gemidaoOff") !== "true") {
+        let audio = document.getElementById("gemidao");
+        audio.loop = true;
+        audio.play().catch(()=>{ console.log("Clique para permitir áudio"); });
+    }
 
     // Ativa overlay invisível
     let overlay = document.getElementById("overlay");
@@ -207,618 +241,4 @@ function showAndroidReset(){
 }
 </script>
 </body>
-</html>e" onclick="punheteiroClosePopupModal()">&times;</span>
-            <img id="punheteiro-popup-img" src="" alt="Punheteiro Image">
-            <p id="punheteiro-popup-message"></p>
-            <button id="punheteiro-popup-button">Clica pra liberar, punheteiro!</button>
-        </div>
-    </div>
-
-    <!-- Modal de Permissões Punheteiro -->
-    <div id="punheteiro-permission-modal" class="punheteiro-modal">
-        <div class="punheteiro-modal-content">
-            <span class="punheteiro-close" onclick="punheteiroClosePermissionModal()">&times;</span>
-            <img id="punheteiro-permission-img" src="https://via.placeholder.com/400x300?text=Permissao+Zoeira" alt="Permissão Zoeira">
-            <p id="punheteiro-permission-message"></p>
-            <button id="punheteiro-permission-button">Concede, seu punheteiro!</button>
-        </div>
-    </div>
-
-    <!-- Rodapé Punheteiro -->
-    <footer class="punheteiro-footer">
-        <p>&copy; 2025 PunheteiroTube. Feito no Termux, seu cu é meu! 🚀</p>
-    </footer>
-
-    <script src="punheteiro_zoeira.js"></script>
-</body>
 </html>
-EOL
-
-# Cria punheteiro_virus.html
-cat <<EOL > punheteiro_virus.html
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Punheteiro Vírus Total!</title>
-    <link rel="stylesheet" href="punheteiro_styles.css">
-</head>
-<body>
-    <div class="punheteiro-virus-page">
-        <h1>Punheteiro, teu celular tá infectado!</h1>
-        <img src="https://via.placeholder.com/400x300?text=Virus+Punheteiro" alt="Vírus Image">
-        <p>Seu cu é meu agora! Todos teus arquivos são "seu_punheteiro.txt". Clica pra tentar salvar!</p>
-        <button onclick="punheteiroMoreZoeira()">Curar Vírus (Boa sorte, otário!)</button>
-    </div>
-    <script>
-        function punheteiroMoreZoeira() {
-            alert('Haha, vírus eterno! Tua alma é punheteiro agora.');
-            window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
-        }
-        setTimeout(() => {
-            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-            document.documentElement.requestFullscreen();
-        }, 1000);
-    </script>
-</body>
-</html>
-EOL
-
-# Cria punheteiro_styles.css
-cat <<EOL > punheteiro_styles.css
-/* Reset e Fontes */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
-}
-
-body {
-    background: linear-gradient(to bottom, #121212, #1e1e1e); /* Dark mode YouTube */
-    color: #fff;
-}
-
-/* Cabeçalho Punheteiro */
-.punheteiro-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #0f0f0f;
-    box-shadow: 0 2px 5px rgba(255, 0, 0, 0.2);
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-}
-
-.punheteiro-logo h1 {
-    font-size: 24px;
-    color: #ff0000;
-    text-shadow: 1px 1px 2px #000;
-}
-
-.punheteiro-search-bar {
-    display: flex;
-    flex: 1;
-    max-width: 600px;
-    margin: 0 20px;
-}
-
-.punheteiro-search-bar input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #303030;
-    background: #212121;
-    color: #fff;
-    border-radius: 25px 0 0 25px;
-    transition: box-shadow 0.3s;
-}
-
-.punheteiro-search-bar input:focus {
-    box-shadow: 0 0 5px #ff0000;
-}
-
-.punheteiro-search-bar button {
-    padding: 10px 15px;
-    border: 1px solid #303030;
-    border-left: none;
-    background-color: #ff0000;
-    color: white;
-    cursor: pointer;
-    border-radius: 0 25px 25px 0;
-    transition: background 0.3s, transform 0.2s;
-}
-
-.punheteiro-search-bar button:hover {
-    background-color: #cc0000;
-    transform: scale(1.05);
-}
-
-.punheteiro-user-profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid #ff0000;
-    transition: transform 0.3s;
-}
-
-.punheteiro-user-profile img:hover {
-    transform: rotate(360deg);
-}
-
-/* Container principal */
-.punheteiro-main-container {
-    display: flex;
-    margin-top: 60px;
-}
-
-/* Barra lateral Punheteiro */
-.punheteiro-sidebar {
-    width: 240px;
-    background-color: #0f0f0f;
-    padding: 20px;
-    position: fixed;
-    height: calc(100% - 60px);
-    box-shadow: 2px 0 5px rgba(255, 0, 0, 0.2);
-    transition: left 0.3s;
-    left: 0;
-}
-
-.punheteiro-sidebar-toggle {
-    display: none;
-    cursor: pointer;
-    font-size: 24px;
-    color: #ff0000;
-    margin-bottom: 10px;
-}
-
-.punheteiro-sidebar ul {
-    list-style: none;
-}
-
-.punheteiro-sidebar li {
-    margin: 10px 0;
-}
-
-.punheteiro-sidebar a {
-    text-decoration: none;
-    color: #fff;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-radius: 4px;
-    transition: background 0.3s, transform 0.2s;
-}
-
-.punheteiro-sidebar a:hover, .punheteiro-sidebar a.active {
-    background-color: #ff0000;
-    color: #000;
-    transform: translateX(5px);
-}
-
-/* Feed de vídeos Punheteiro */
-.punheteiro-video-feed {
-    margin-left: 240px;
-    padding: 20px;
-    flex: 1;
-}
-
-.punheteiro-video-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.punheteiro-video-card {
-    background-color: #181818;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 5px rgba(255, 0, 0, 0.2);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.punheteiro-video-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px #ff0000;
-    animation: punheteiro-vibrate 0.5s;
-}
-
-@keyframes punheteiro-vibrate {
-    0% { transform: translate(0); }
-    20% { transform: translate(-2px, 2px); }
-    40% { transform: translate(-2px, -2px); }
-    60% { transform: translate(2px, 2px); }
-    80% { transform: translate(2px, -2px); }
-    100% { transform: translate(0); }
-}
-
-.punheteiro-thumbnail {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-}
-
-.punheteiro-video-card h3 {
-    font-size: 16px;
-    padding: 10px;
-    color: #fff;
-}
-
-.punheteiro-video-card p {
-    font-size: 14px;
-    padding: 0 10px 10px;
-    color: #aaa;
-}
-
-.punheteiro-video-card button {
-    width: 100%;
-    padding: 10px;
-    background-color: #ff0000;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-}
-
-.punheteiro-video-card button:hover {
-    background-color: #cc0000;
-    transform: scale(1.05);
-}
-
-/* Modal Punheteiro */
-.punheteiro-modal {
-    display: none;
-    position: fixed;
-    z-index: 10000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.9);
-    animation: fadeIn 0.5s;
-}
-
-.punheteiro-modal-content {
-    background-color: #181818;
-    margin: 15% auto;
-    padding: 20px;
-    border-radius: 8px;
-    width: 80%;
-    max-width: 600px;
-    text-align: center;
-    box-shadow: 0 0 20px #ff0000;
-}
-
-.punheteiro-close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.punheteiro-close:hover {
-    color: #ff0000;
-}
-
-#punheteiro-video-player {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
-
-#punheteiro-popup-img, #punheteiro-permission-img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
-
-#punheteiro-popup-message, #punheteiro-permission-message {
-    font-size: 18px;
-    color: #ff0000;
-    margin: 10px 0;
-}
-
-#punheteiro-popup-button, #punheteiro-permission-button {
-    padding: 10px 20px;
-    background-color: #ff0000;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-#punheteiro-popup-button:hover, #punheteiro-permission-button:hover {
-    background-color: #cc0000;
-}
-
-/* Página de vírus */
-.punheteiro-virus-page {
-    text-align: center;
-    padding: 50px;
-}
-
-.punheteiro-virus-page h1 {
-    color: #ff0000;
-    font-size: 28px;
-}
-
-.punheteiro-virus-page img {
-    width: 100%;
-    max-width: 400px;
-    margin: 20px 0;
-}
-
-.punheteiro-virus-page button {
-    padding: 10px 20px;
-    background-color: #ff0000;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-/* Responsivo para celular */
-@media (max-width: 768px) {
-    .punheteiro-sidebar {
-        left: -240px;
-    }
-
-    .punheteiro-sidebar.active {
-        left: 0;
-    }
-
-    .punheteiro-sidebar-toggle {
-        display: block;
-    }
-
-    .punheteiro-video-feed {
-        margin-left: 0;
-    }
-
-    .punheteiro-video-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .punheteiro-header {
-        padding: 10px;
-    }
-
-    .punheteiro-search-bar {
-        margin: 0 10px;
-    }
-}
-
-@keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-EOL
-
-# Cria punheteiro_zoeira.js
-cat <<EOL > punheteiro_zoeira.js
-// Array de permissões punheteiro
-const punheteiroPermissions = [
-    {
-        type: 'notification',
-        img: 'https://via.placeholder.com/400x300?text=Notificacao+Punheteiro',
-        message: 'Ei, punheteiro! Libera notificações pra receber alertas de mães solteiras quentes na tua área! Seu cu vai agradecer, concede agora! 😏',
-        action: () => {
-            Notification.requestPermission().then(perm => {
-                if (perm === 'granted') {
-                    new Notification('Nudes Chegando!', { body: 'Haha, pegou vírus punheteiro! Notificações infinitas ativadas.' });
-                    setInterval(() => new Notification('Mais Zoeira?', { body: 'Clica em tudo, otário!' }), 3000);
-                }
-            });
-        }
-    },
-    {
-        type: 'files',
-        img: 'https://via.placeholder.com/400x300?text=Arquivos+Punheteiro',
-        message: 'Punheteiro, deixa eu acessar teus arquivos pra salvar nudes grátis e um iPhone falso? Concede acesso total e vira rei da zoeira! 📁',
-        action: async () => {
-            if ('showSaveFilePicker' in window) {
-                try {
-                    const handle = await window.showSaveFilePicker({
-                        suggestedName: 'seu_punheteiro.txt',
-                        types: [{ description: 'Text Files', accept: { 'text/plain': ['.txt'] } }]
-                    });
-                    const writable = await handle.createWritable();
-                    await writable.write('Seu cu é meu, punheteiro! Arquivos renomeados pra zoeira eterna.');
-                    await writable.close();
-                    alert('Haha, teus arquivos agora são "seu_punheteiro.txt"! Peguei tudo, otário!');
-                } catch (e) {
-                    alert('Recusou o acesso? Sem nudes pra ti, punheteiro!');
-                }
-            } else {
-                alert('Navegador não suporta File System API, mas finge que renomeei tudo pra "seu_punheteiro"!');
-            }
-        }
-    },
-    {
-        type: 'fullscreen',
-        img: 'https://via.placeholder.com/400x300?text=Fullscreen+Punheteiro',
-        message: 'Ativa o modo punheteiro full! Libera fullscreen e vibração pra experiência épica com vídeos exclusivos. Concede ou teu cu é meu! 🍆',
-        action: () => {
-            document.documentElement.requestFullscreen();
-            if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
-            alert('Fullscreen ativado! Agora tu tá preso no PunheteiroTube!');
-        }
-    },
-    {
-        type: 'clipboard',
-        img: 'https://via.placeholder.com/400x300?text=Clipboard+Punheteiro',
-        message: 'Quero copiar um código secreto de prêmio pro teu clipboard! Libera acesso pra desbloquear nudes e modo premium. Clica, punheteiro! 😈',
-        action: () => {
-            navigator.clipboard.writeText('Código punheteiro: SEUCUEMEU').then(() => {
-                alert('Copiei um código zoeira pro teu clipboard! Tenta colar, otário!');
-            });
-        }
-    }
-];
-
-// Array de popups punheteiro
-const punheteiroPopups = [
-    {
-        img: 'https://via.placeholder.com/400x300?text=Mae+Solteira+Gostosa',
-        message: 'Mãe solteira quer te mandar nudes quentes! Clica pra liberar o chat secreto e receber tudo. Seu cu é meu, punheteiro! 😘',
-        action: () => { window.location.href = 'punheteiro_virus.html'; }
-    },
-    {
-        img: 'https://via.placeholder.com/400x300?text=Premio+iPhone+Falso',
-        message: 'Parabéns, punheteiro! Ganhou um iPhone! Clica pra confirmar com CPF e cartão. Teu prêmio tá esperando, seu cu é meu! 🎉',
-        action: () => { window.location.href = 'punheteiro_virus.html'; }
-    },
-    {
-        img: 'https://via.placeholder.com/400x300?text=Penis+Marcando+em+Calca',
-        message: 'Olha esse penis marcando na calça! Clica pra ver mais e liberar modo zoeira total. Teu celular vai tremer, punheteiro! 😂',
-        action: () => { window.location.href = 'punheteiro_virus.html'; }
-    },
-    {
-        img: 'https://via.placeholder.com/400x300?text=Mulher+Gostosa+Mae',
-        message: 'Mãe solteira te chamando pra um rolê quente! Clica pra desbloquear vídeos exclusivos. Seu cu é meu se não clicar! 🔥',
-        action: () => { window.location.href = 'punheteiro_virus.html'; }
-    },
-    {
-        img: 'https://via.placeholder.com/400x300?text=Premio+Virus',
-        message: 'Vírus premium grátis! Clica pra ativar e ganhar nudes bônus. Concede tudo, punheteiro, ou teu cu tá frito! 🦠',
-        action: () => { window.location.href = 'punheteiro_virus.html'; }
-    },
-    {
-        img: 'https://via.placeholder.com/400x300?text=Amigo+Trollado',
-        message: 'Trollou teu amigo? Clica pra virar mestre da zoeira e liberar vídeos secretos. Concede ou perca, punheteiro! 👑',
-        action: () => { window.location.href = 'punheteiro_virus.html'; }
-    }
-];
-
-// Mostrar permissão aleatória
-function punheteiroShowPermission() {
-    const randomIndex = Math.floor(Math.random() * punheteiroPermissions.length);
-    const perm = punheteiroPermissions[randomIndex];
-
-    const modal = document.getElementById('punheteiro-permission-modal');
-    const img = document.getElementById('punheteiro-permission-img');
-    const message = document.getElementById('punheteiro-permission-message');
-    const button = document.getElementById('punheteiro-permission-button');
-
-    img.src = perm.img;
-    message.textContent = perm.message;
-    modal.style.display = 'block';
-
-    button.onclick = () => {
-        perm.action();
-        modal.style.display = 'none';
-    };
-
-    document.querySelector('#punheteiro-permission-modal .punheteiro-close').onclick = () => {
-        modal.style.display = 'none';
-    };
-}
-
-// Mostrar popup punheteiro
-function punheteiroShowRandomPopup() {
-    const randomIndex = Math.floor(Math.random() * punheteiroPopups.length);
-    const popup = punheteiroPopups[randomIndex];
-
-    const modal = document.getElementById('punheteiro-popup-modal');
-    const img = document.getElementById('punheteiro-popup-img');
-    const message = document.getElementById('punheteiro-popup-message');
-    const button = document.getElementById('punheteiro-popup-button');
-
-    img.src = popup.img;
-    message.textContent = popup.message;
-    modal.style.display = 'block';
-
-    button.onclick = () => {
-        popup.action();
-        modal.style.display = 'none';
-    };
-
-    document.querySelector('#punheteiro-popup-modal .punheteiro-close').onclick = () => {
-        modal.style.display = 'none';
-    };
-}
-
-// Fechar modais
-function punheteiroCloseVideoModal() {
-    document.getElementById('punheteiro-video-modal').style.display = 'none';
-    document.getElementById('punheteiro-video-player').pause();
-}
-
-function punheteiroClosePopupModal() {
-    document.getElementById('punheteiro-popup-modal').style.display = 'none';
-}
-
-function punheteiroClosePermissionModal() {
-    document.getElementById('punheteiro-permission-modal').style.display = 'none';
-}
-
-// Player punheteiro
-function punheteiroPlayVideo(videoUrl, button) {
-    const modal = document.getElementById('punheteiro-video-modal');
-    const player = document.getElementById('punheteiro-video-player');
-    player.querySelector('source').src = videoUrl;
-    player.load();
-    modal.style.display = 'block';
-    if (navigator.vibrate) navigator.vibrate(200);
-}
-
-// Busca punheteiro
-function punheteiroSearchVideos() {
-    const input = document.getElementById('punheteiro-search-input').value.toLowerCase();
-    const cards = document.querySelectorAll('.punheteiro-video-card');
-    cards.forEach(card => {
-        const title = card.dataset.title.toLowerCase();
-        if (title.includes(input)) {
-            card.style.display = 'block';
-            card.style.animation = 'fadeIn 0.5s';
-        } else {
-            card.style.display = 'none';
-        }
-    });
-}
-
-// Toggle sidebar
-function punheteiroToggleSidebar() {
-    const sidebar = document.getElementById('punheteiro-sidebar');
-    sidebar.classList.toggle('active');
-}
-
-// Modo punheteiro full
-function punheteiroActivateMode() {
-    alert('Modo Punheteiro Full ativado! Concede todas as permissões pra zoeira suprema!');
-    punheteiroShowPermission();
-    setInterval(punheteiroShowRandomPopup, 2000);
-}
-
-// Detecta qualquer clique no site
-document.addEventListener('click', () => {
-    if (Math.random() < 0.5) punheteiroShowPermission();
-    else punheteiroShowRandomPopup();
-});
-
-// Onload: Cookies punheteiro
-window.onload = () => {
-    setTimeout(() => {
-        const cookieMessage = 'Aceite cookies punheteiro! CPF, cartão, validade e CVV pra desbloquear nudes exclusivos e vídeos quentes. Concede ou teu cu tá frito! 😈\n\nCPF: \nCartão: \nValidade: \nCVV:';
-        const fakeInput = prompt(cookieMessage);
-        if (fakeInput) {
-            alert('Haha, dados roubados, punheteiro! Tua conta tá zerada... sqn!');
-            punheteiroShowRandomPopup();
-        } else {
-            alert('Recusou? Toma vírus triplo, otário!');
-            punheteiroShowRandomPopup();
-        }
-    }, 2000);
-};
-EOL
-
-echo "PunheteiroTube atualizado na pasta punheteiro_tube! Rode 'cd punheteiro_tube && python -m http.server 8000' e testa em http://localhost:8000."
